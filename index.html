@@ -1,62 +1,794 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>Yun Quote App</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yun Quote App</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(to bottom, #ffffff, #f1f5f9);
+      color: #111827;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    .hero {
+      margin-bottom: 20px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 34px;
+      line-height: 1.2;
+    }
+
+    .sub {
+      margin-top: 10px;
+      color: #6b7280;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    button {
+      border: none;
+      border-radius: 14px;
+      padding: 11px 16px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.2s ease;
+    }
+
+    button:hover {
+      opacity: 0.92;
+    }
+
+    .btn-primary {
+      background: #111827;
+      color: #ffffff;
+    }
+
+    .btn-outline {
+      background: #ffffff;
+      color: #111827;
+      border: 1px solid #d1d5db;
+    }
+
+    .btn-danger {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 20px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 22px;
+      box-shadow: 0 12px 34px rgba(0,0,0,0.06);
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .pill {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      background: #fff;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .pill.active {
+      background: #111827;
+      color: #fff;
+      border-color: #111827;
+    }
+
+    .quote-box {
+      min-height: 360px;
+      border-radius: 28px;
+      background: radial-gradient(circle at top, #ffffff, rgba(241,245,249,0.95), rgba(226,232,240,0.92));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      text-align: center;
+    }
+
+    .quote-category {
+      display: inline-block;
+      margin-bottom: 16px;
+      font-size: 13px;
+      color: #374151;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid #e5e7eb;
+      padding: 7px 12px;
+      border-radius: 999px;
+    }
+
+    .quote-ko {
+      font-size: 28px;
+      line-height: 1.8;
+      margin: 0;
+      white-space: pre-wrap;
+    }
+
+    .quote-en-wrap {
+      margin: 22px auto 0;
+      max-width: 560px;
+      padding: 18px;
+      background: rgba(255,255,255,0.82);
+      border-radius: 22px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.04);
+    }
+
+    .quote-en-label {
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .quote-en {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.75;
+      color: #4b5563;
+      white-space: pre-wrap;
+    }
+
+    .quote-actions {
+      margin-top: 24px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .empty {
+      color: #6b7280;
+      text-align: center;
+      line-height: 1.7;
+    }
+
+    .search {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid #d1d5db;
+      outline: none;
+      font-size: 14px;
+      margin-bottom: 14px;
+    }
+
+    .list {
+      max-height: 560px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .list-item {
+      border: 1px solid #eceff3;
+      border-radius: 22px;
+      padding: 16px;
+      margin-bottom: 12px;
+      background: #fff;
+    }
+
+    .list-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .list-cat {
+      display: inline-block;
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    .mini-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .mini-btn {
+      padding: 7px 10px;
+      font-size: 12px;
+      border-radius: 10px;
+    }
+
+    .list-ko {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    .list-en {
+      margin: 10px 0 0;
+      color: #6b7280;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .form-card {
+      margin-top: 20px;
+    }
+
+    .label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin: 12px 0 8px;
+    }
+
+    textarea, select {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 16px;
+      padding: 12px 14px;
+      font-size: 14px;
+      outline: none;
+      background: #fff;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+      font-family: inherit;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .muted {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 8px;
+      line-height: 1.6;
+    }
+
+    .loading {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 820px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .quote-ko {
+        font-size: 22px;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-
 <body>
-<h2>📖 Yun Quote App</h2>
+  <div class="container">
+    <div class="hero">
+      <div class="badge">Yun’s Quote Room</div>
+      <h1>나만의 글귀 보관함</h1>
+      <div class="sub">
+        좋아하는 문장을 저장하고, 카테고리별로 모아두고, 랜덤으로 다시 꺼내보는 누님 전용 웹앱.
+        이제 Firebase에 저장해서 어디서든 같은 글귀를 볼 수 있게 만든 버전이야.
+      </div>
+    </div>
 
-<textarea id="korean" placeholder="한국어"></textarea><br>
-<textarea id="english" placeholder="영어"></textarea><br>
-<button onclick="addQuote()">저장</button>
-<button onclick="loadQuotes()">불러오기</button>
+    <div class="toolbar">
+      <button id="tabRandom" class="btn-primary">랜덤 글귀</button>
+      <button id="tabAll" class="btn-outline">모든 글귀 보기</button>
+      <button id="refreshBtn" class="btn-outline">새로 불러오기</button>
+    </div>
 
-<div id="list"></div>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">전체</div>
+        <div id="statTotal" class="stat-value">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">R=VD</div>
+        <div id="statRvd" class="stat-value">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">감성</div>
+        <div id="statEmo" class="stat-value">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">즐겨찾기</div>
+        <div id="statFav" class="stat-value">0</div>
+      </div>
+    </div>
 
-<!-- Firebase -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    <div class="grid">
+      <div>
+        <div id="randomCard" class="card">
+          <div class="card-title">오늘의 랜덤 글귀</div>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCLGqfm649Cl1AJfNcrjZd6zcpiTxOugbs",
-  authDomain: "quote-app-77498.firebaseapp.com",
-  projectId: "quote-app-77498",
-  storageBucket: "quote-app-77498.firebasestorage.app",
-  messagingSenderId: "856472751553",
-  appId: "1:856472751553:web:5df8880a34739603d4b340"
-};
+          <div class="filter-row">
+            <button class="pill active" data-filter="전체">전체</button>
+            <button class="pill" data-filter="R=VD">R=VD</button>
+            <button class="pill" data-filter="감성">감성</button>
+          </div>
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+          <div class="quote-box">
+            <div id="quoteArea" class="empty">불러오는 중...</div>
+          </div>
+        </div>
 
-window.addQuote = async function() {
-  const k = document.getElementById("korean").value;
-  const e = document.getElementById("english").value;
+        <div id="allCard" class="card" style="display:none;">
+          <div class="card-title">모든 글귀 보기</div>
+          <input id="searchInput" class="search" type="text" placeholder="글귀 검색" />
 
-  if (!k) return;
+          <div class="filter-row">
+            <button class="pill active" data-all-filter="전체">전체</button>
+            <button class="pill" data-all-filter="R=VD">R=VD</button>
+            <button class="pill" data-all-filter="감성">감성</button>
+          </div>
 
-  await addDoc(collection(db, "quotes"), {
-    korean: k,
-    english: e
-  });
+          <div id="allList" class="list"></div>
+        </div>
+      </div>
 
-  alert("저장 완료!");
-};
+      <div>
+        <div class="card">
+          <div class="card-title">새 글귀 저장</div>
+          <div id="loadingText" class="loading">Firebase 연결 중...</div>
 
-window.loadQuotes = async function() {
-  const querySnapshot = await getDocs(collection(db, "quotes"));
-  const list = document.getElementById("list");
-  list.innerHTML = "";
+          <label class="label" for="koreanInput">한국어 글귀</label>
+          <textarea id="koreanInput" placeholder="좋아하는 한국어 글귀를 입력해 주세요"></textarea>
 
-  querySnapshot.forEach((doc) => {
-    const data = doc.data();
-    list.innerHTML += `<p><b>${data.korean}</b><br>${data.english || ""}</p>`;
-  });
-};
-</script>
+          <label class="label" for="englishInput">영어 번역</label>
+          <textarea id="englishInput" placeholder="영어 번역을 함께 넣고 싶다면 입력해 주세요"></textarea>
 
+          <div class="row">
+            <div>
+              <label class="label" for="categoryInput">카테고리</label>
+              <select id="categoryInput">
+                <option value="감성">감성</option>
+                <option value="R=VD">R=VD</option>
+              </select>
+            </div>
+            <div>
+              <label class="label" for="favoriteInput">즐겨찾기</label>
+              <select id="favoriteInput">
+                <option value="false">아니오</option>
+                <option value="true">예</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="toolbar" style="margin-bottom:0;">
+            <button id="saveBtn" class="btn-primary">저장하기</button>
+          </div>
+
+          <div class="muted">
+            저장하면 Firebase에 올라가서 같은 주소로 접속한 다른 기기에서도 같이 볼 수 있어.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      getDocs,
+      updateDoc,
+      deleteDoc,
+      doc,
+      serverTimestamp,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCLGqfm649Cl1AJfNcrjZd6zcpiTxOugbs",
+      authDomain: "quote-app-77498.firebaseapp.com",
+      projectId: "quote-app-77498",
+      storageBucket: "quote-app-77498.firebasestorage.app",
+      messagingSenderId: "856472751553",
+      appId: "1:856472751553:web:5df8880a34739603d4b340"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const quotesRef = collection(db, "quotes");
+
+    let quotes = [];
+    let currentQuote = null;
+    let currentFilter = "전체";
+    let allFilter = "전체";
+    let currentView = "random";
+
+    const quoteArea = document.getElementById("quoteArea");
+    const allList = document.getElementById("allList");
+    const searchInput = document.getElementById("searchInput");
+    const loadingText = document.getElementById("loadingText");
+
+    const tabRandom = document.getElementById("tabRandom");
+    const tabAll = document.getElementById("tabAll");
+    const randomCard = document.getElementById("randomCard");
+    const allCard = document.getElementById("allCard");
+
+    const statTotal = document.getElementById("statTotal");
+    const statRvd = document.getElementById("statRvd");
+    const statEmo = document.getElementById("statEmo");
+    const statFav = document.getElementById("statFav");
+
+    function escapeHtml(str = "") {
+      return str
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function setView(view) {
+      currentView = view;
+
+      if (view === "random") {
+        randomCard.style.display = "block";
+        allCard.style.display = "none";
+        tabRandom.className = "btn-primary";
+        tabAll.className = "btn-outline";
+      } else {
+        randomCard.style.display = "none";
+        allCard.style.display = "block";
+        tabRandom.className = "btn-outline";
+        tabAll.className = "btn-primary";
+      }
+    }
+
+    function updateStats() {
+      statTotal.textContent = quotes.length;
+      statRvd.textContent = quotes.filter(q => q.category === "R=VD").length;
+      statEmo.textContent = quotes.filter(q => q.category === "감성").length;
+      statFav.textContent = quotes.filter(q => q.favorite).length;
+    }
+
+    function getFilteredQuotesForRandom() {
+      return quotes.filter(q => currentFilter === "전체" || q.category === currentFilter);
+    }
+
+    function getFilteredQuotesForAll() {
+      const keyword = searchInput.value.trim().toLowerCase();
+
+      return quotes.filter(q => {
+        const categoryOk = allFilter === "전체" || q.category === allFilter;
+        const searchOk =
+          !keyword ||
+          q.text.toLowerCase().includes(keyword) ||
+          (q.english || "").toLowerCase().includes(keyword);
+
+        return categoryOk && searchOk;
+      });
+    }
+
+    function renderRandomQuote() {
+      const filtered = getFilteredQuotesForRandom();
+
+      if (!filtered.length) {
+        quoteArea.innerHTML = `<div class="empty">해당 카테고리에 글귀가 없어요.</div>`;
+        return;
+      }
+
+      if (!currentQuote || !filtered.some(q => q.id === currentQuote.id)) {
+        currentQuote = filtered[Math.floor(Math.random() * filtered.length)];
+      }
+
+      quoteArea.innerHTML = `
+        <div style="width:100%;">
+          <div class="quote-category">${escapeHtml(currentQuote.category)}</div>
+          <p class="quote-ko">“${escapeHtml(currentQuote.text)}”</p>
+          ${
+            currentQuote.english
+              ? `
+              <div class="quote-en-wrap">
+                <div class="quote-en-label">English Version</div>
+                <p class="quote-en">${escapeHtml(currentQuote.english)}</p>
+              </div>
+            `
+              : ""
+          }
+          <div class="quote-actions">
+            <button id="randomPickBtn" class="btn-outline">다른 글귀 보기</button>
+            <button id="toggleFavBtn" class="${currentQuote.favorite ? "btn-primary" : "btn-outline"}">
+              ${currentQuote.favorite ? "즐겨찾기 해제" : "즐겨찾기"}
+            </button>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("randomPickBtn").addEventListener("click", pickRandomQuote);
+      document.getElementById("toggleFavBtn").addEventListener("click", async () => {
+        await toggleFavorite(currentQuote.id, !currentQuote.favorite);
+      });
+    }
+
+    function renderAllQuotes() {
+      const filtered = getFilteredQuotesForAll();
+
+      if (!filtered.length) {
+        allList.innerHTML = `<div class="empty" style="padding:30px 0;">조건에 맞는 글귀가 없어요.</div>`;
+        return;
+      }
+
+      allList.innerHTML = filtered.map(q => `
+        <div class="list-item">
+          <div class="list-top">
+            <span class="list-cat">${escapeHtml(q.category)}</span>
+            <div class="mini-actions">
+              <button class="mini-btn btn-outline" data-open="${q.id}">보기</button>
+              <button class="mini-btn ${q.favorite ? "btn-primary" : "btn-outline"}" data-fav="${q.id}">
+                ${q.favorite ? "★" : "☆"}
+              </button>
+              <button class="mini-btn btn-danger" data-del="${q.id}">삭제</button>
+            </div>
+          </div>
+          <p class="list-ko">${escapeHtml(q.text)}</p>
+          ${q.english ? `<p class="list-en">${escapeHtml(q.english)}</p>` : ""}
+        </div>
+      `).join("");
+
+      document.querySelectorAll("[data-open]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const q = quotes.find(item => item.id === btn.dataset.open);
+          if (!q) return;
+          currentQuote = q;
+          setView("random");
+          renderRandomQuote();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      });
+
+      document.querySelectorAll("[data-fav]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const q = quotes.find(item => item.id === btn.dataset.fav);
+          if (!q) return;
+          await toggleFavorite(q.id, !q.favorite);
+        });
+      });
+
+      document.querySelectorAll("[data-del]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const ok = confirm("이 글귀를 삭제할까?");
+          if (!ok) return;
+          await removeQuote(btn.dataset.del);
+        });
+      });
+    }
+
+    function pickRandomQuote() {
+      const filtered = getFilteredQuotesForRandom();
+      if (!filtered.length) return;
+
+      let next = filtered[Math.floor(Math.random() * filtered.length)];
+
+      if (filtered.length > 1 && currentQuote && next.id === currentQuote.id) {
+        next = filtered.find(q => q.id !== currentQuote.id) || next;
+      }
+
+      currentQuote = next;
+      renderRandomQuote();
+    }
+
+    async function fetchQuotes() {
+      loadingText.textContent = "Firebase에서 글귀 불러오는 중...";
+      try {
+        const q = query(quotesRef, orderBy("createdAt", "desc"));
+        const snapshot = await getDocs(q);
+
+        quotes = snapshot.docs.map(d => ({
+          id: d.id,
+          text: d.data().text || "",
+          english: d.data().english || "",
+          category: d.data().category || "감성",
+          favorite: !!d.data().favorite,
+          createdAt: d.data().createdAt || null
+        }));
+
+        updateStats();
+        renderAllQuotes();
+
+        const filtered = getFilteredQuotesForRandom();
+        currentQuote = filtered[0] || null;
+        renderRandomQuote();
+
+        loadingText.textContent = "Firebase 연결 완료";
+      } catch (error) {
+        console.error(error);
+        loadingText.textContent = "불러오기 실패. Firestore 설정을 확인해 주세요.";
+        quoteArea.innerHTML = `
+          <div class="empty">
+            데이터를 불러오지 못했어.<br>
+            Firestore Database를 만들었는지, 규칙이 너무 막혀있지 않은지 확인해줘.
+          </div>
+        `;
+      }
+    }
+
+    async function addQuote() {
+      const text = document.getElementById("koreanInput").value.trim();
+      const english = document.getElementById("englishInput").value.trim();
+      const category = document.getElementById("categoryInput").value;
+      const favorite = document.getElementById("favoriteInput").value === "true";
+
+      if (!text) {
+        alert("한국어 글귀를 입력해줘.");
+        return;
+      }
+
+      try {
+        await addDoc(quotesRef, {
+          text,
+          english,
+          category,
+          favorite,
+          createdAt: serverTimestamp()
+        });
+
+        document.getElementById("koreanInput").value = "";
+        document.getElementById("englishInput").value = "";
+        document.getElementById("categoryInput").value = "감성";
+        document.getElementById("favoriteInput").value = "false";
+
+        await fetchQuotes();
+        alert("저장 완료!");
+      } catch (error) {
+        console.error(error);
+        alert("저장 실패. Firestore 권한이나 설정을 확인해줘.");
+      }
+    }
+
+    async function toggleFavorite(id, value) {
+      try {
+        const ref = doc(db, "quotes", id);
+        await updateDoc(ref, { favorite: value });
+        await fetchQuotes();
+      } catch (error) {
+        console.error(error);
+        alert("즐겨찾기 변경 실패");
+      }
+    }
+
+    async function removeQuote(id) {
+      try {
+        const ref = doc(db, "quotes", id);
+        await deleteDoc(ref);
+        await fetchQuotes();
+      } catch (error) {
+        console.error(error);
+        alert("삭제 실패");
+      }
+    }
+
+    document.getElementById("saveBtn").addEventListener("click", addQuote);
+    document.getElementById("refreshBtn").addEventListener("click", fetchQuotes);
+
+    tabRandom.addEventListener("click", () => setView("random"));
+    tabAll.addEventListener("click", () => {
+      setView("all");
+      renderAllQuotes();
+    });
+
+    searchInput.addEventListener("input", renderAllQuotes);
+
+    document.querySelectorAll("[data-filter]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        currentFilter = btn.dataset.filter;
+        document.querySelectorAll("[data-filter]").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentQuote = null;
+        renderRandomQuote();
+      });
+    });
+
+    document.querySelectorAll("[data-all-filter]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        allFilter = btn.dataset.allFilter;
+        document.querySelectorAll("[data-all-filter]").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        renderAllQuotes();
+      });
+    });
+
+    setView("random");
+    fetchQuotes();
+  </script>
 </body>
 </html>
