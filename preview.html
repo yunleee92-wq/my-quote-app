@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Yun Quote App</title>
+<style>
+body {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(to bottom, #ffffff, #f1f5f9);
+  margin: 0;
+  padding: 20px;
+}
+.container {
+  max-width: 800px;
+  margin: auto;
+}
+.card {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+button {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.primary { background: black; color: white; }
+.outline { background: white; border: 1px solid #ddd; }
+.quote {
+  font-size: 22px;
+  line-height: 1.6;
+  text-align: center;
+}
+.eng {
+  margin-top: 15px;
+  color: #555;
+  text-align: center;
+}
+.list-item {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h2>📖 Yun Quote App</h2>
+
+<div>
+  <button class="primary" onclick="setView('random')">랜덤 글귀</button>
+  <button class="outline" onclick="setView('all')">전체 보기</button>
+</div>
+
+<div class="card" id="randomView">
+  <div class="quote" id="quoteText"></div>
+  <div class="eng" id="quoteEng"></div>
+  <div style="text-align:center;margin-top:20px;">
+    <button onclick="randomQuote()">랜덤</button>
+  </div>
+</div>
+
+<div class="card" id="allView" style="display:none;">
+  <div id="list"></div>
+</div>
+
+<div class="card">
+  <h4>글귀 추가</h4>
+  <textarea id="korean" placeholder="한국어"></textarea>
+  <textarea id="english" placeholder="영어 번역"></textarea>
+  <button class="primary" onclick="addQuote()">저장</button>
+</div>
+
+</div>
+
+<script>
+let quotes = JSON.parse(localStorage.getItem('quotes')) || [
+  {k:"흘러가는 하루 같아 보여도 결국 마음은 쌓인다.", e:"Even if a day drifts by, the heart keeps everything."},
+  {k:"이미 이루어진 것처럼 생각하라.", e:"Think as if it has already happened."}
+];
+
+function save() {
+  localStorage.setItem('quotes', JSON.stringify(quotes));
+}
+
+function randomQuote() {
+  if (quotes.length === 0) return;
+  let q = quotes[Math.floor(Math.random() * quotes.length)];
+  document.getElementById("quoteText").innerText = "“" + q.k + "”";
+  document.getElementById("quoteEng").innerText = q.e || "";
+}
+
+function addQuote() {
+  let k = document.getElementById("korean").value.trim();
+  let e = document.getElementById("english").value.trim();
+  if (!k) return;
+  quotes.push({k,e});
+  save();
+  renderList();
+  randomQuote();
+}
+
+function renderList() {
+  let list = document.getElementById("list");
+  list.innerHTML = "";
+  quotes.forEach((q, i) => {
+    let div = document.createElement("div");
+    div.className = "list-item";
+    div.innerHTML = "<b>"+q.k+"</b><br><span style='color:#666'>"+(q.e||"")+"</span>";
+    div.onclick = () => {
+      document.getElementById("quoteText").innerText = "“" + q.k + "”";
+      document.getElementById("quoteEng").innerText = q.e || "";
+      setView('random');
+    };
+    list.appendChild(div);
+  });
+}
+
+function setView(v) {
+  document.getElementById("randomView").style.display = v === 'random' ? 'block' : 'none';
+  document.getElementById("allView").style.display = v === 'all' ? 'block' : 'none';
+}
+
+renderList();
+randomQuote();
+</script>
+
+</body>
+</html>
