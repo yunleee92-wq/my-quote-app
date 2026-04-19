@@ -149,13 +149,19 @@
 
     .layout {
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
+      grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
       gap: 18px;
       align-items: start;
     }
 
     .panel {
       padding: 22px;
+    }
+
+    #randomPanel {
+      max-width: 760px;
+      width: 100%;
+      justify-self: center;
     }
 
     .panel-title {
@@ -372,8 +378,7 @@
       <div class="hero-badge">Yun’s Quote Room</div>
       <h1>나만의 글귀 보관함</h1>
       <p class="hero-sub">
-        구글 시트에 정리한 글귀를 불러와 랜덤으로 꺼내보는 누님 전용 웹앱.
-        한국어 원문과 영어 문장을 함께, 차분하고 감성적인 카드 형태로 볼 수 있게 만들었어.
+      
       </p>
     </div>
 
@@ -405,7 +410,7 @@
         <div class="panel-title"><span>오늘의 랜덤 글귀</span></div>
         <div id="statusText" class="status">구글 스크립트에서 데이터를 불러오는 중...</div>
         <div class="quote-stage">
-          <div id="quoteStageContent" class="empty">잠시만 기다려줘.</div>
+          <div id="quoteStageContent" class="empty">잠시만 기다려 주세요.</div>
         </div>
       </div>
 
@@ -414,7 +419,7 @@
         <input id="searchInput" class="search" type="text" placeholder="한국어 또는 영어로 검색" />
         <div id="allList" class="list"></div>
         <div class="notice">
-          새 글귀를 추가할 때는 구글 시트에만 입력하면 돼. 그 다음 이 페이지에서 새로고침하거나 <b>최신 글귀 다시 불러오기</b>를 누르면 반영돼.
+        
         </div>
       </div>
     </div>
@@ -520,16 +525,24 @@
 
     function pickRandomQuote() {
       if (!quotes.length) return;
-      let next = quotes[Math.floor(Math.random() * quotes.length)];
-      if (quotes.length > 1 && currentQuote && next.korean === currentQuote.korean && next.english === currentQuote.english) {
-        next = quotes.find(q => q !== currentQuote) || next;
+      let nextIndex = Math.floor(Math.random() * quotes.length);
+
+      if (quotes.length > 1 && currentQuote) {
+        const currentIndex = quotes.findIndex(
+          q => q.korean === currentQuote.korean && q.english === currentQuote.english
+        );
+
+        while (nextIndex === currentIndex) {
+          nextIndex = Math.floor(Math.random() * quotes.length);
+        }
       }
-      currentQuote = next;
+
+      currentQuote = quotes[nextIndex];
       renderRandomQuote();
     }
 
     async function loadQuotes() {
-      statusText.textContent = "구글 스크립트에서 최신 글귀를 불러오는 중...";
+      statusText.textContent = " 최신 글귀를 불러오는 중...";
       quoteStageContent.innerHTML = `<div class="empty">구글 스크립트에서 최신 글귀를 불러오는 중...</div>`;
       statStatus.textContent = "불러오는 중";
 
@@ -545,11 +558,11 @@
             })).filter(item => item.korean)
           : [];
 
-        currentQuote = quotes[0] || null;
+        currentQuote = quotes.length ? quotes[Math.floor(Math.random() * quotes.length)] : null;
         updateStats();
         renderRandomQuote();
         renderAllQuotes();
-        statusText.textContent = "구글 시트와 연결됐어. 시트 수정 후 다시 불러오면 최신 글귀가 반영돼.";
+        statusText.textContent = "연결";
       } catch (error) {
         console.error(error);
         statStatus.textContent = "연결 실패";
