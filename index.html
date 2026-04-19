@@ -424,7 +424,8 @@
 
   <script>
     const SHEET_ID = "14ydHmPpxH3K61lLpP9Y_PQthyEvCXz_J_A6NoFGXdnE";
-    const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Sheet1`;
+    const SHEET_GID = "1598964787";
+    const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
 
     let quotes = [];
     let currentQuote = null;
@@ -586,6 +587,7 @@
 
     async function loadQuotes() {
       statusText.textContent = "구글시트에서 최신 글귀를 불러오는 중...";
+      quoteStageContent.innerHTML = `<div class="empty">구글시트에서 최신 글귀를 불러오는 중...</div>`;
       statStatus.textContent = "불러오는 중";
 
       try {
