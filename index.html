@@ -3,99 +3,135 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Yun Quote App</title>
+  <title>Yun Quote Room</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: linear-gradient(to bottom, #ffffff, #f1f5f9);
-      color: #111827;
+      min-height: 100vh;
+      font-family: "Inter", sans-serif;
+      color: #1f2937;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.95), rgba(243,244,246,0.85) 40%, rgba(229,231,235,0.9) 100%),
+        linear-gradient(135deg, #f9fafb 0%, #eef2ff 100%);
     }
 
     .container {
-      max-width: 960px;
+      max-width: 1120px;
       margin: 0 auto;
-      padding: 24px 16px 48px;
+      padding: 28px 18px 56px;
     }
 
     .hero {
-      margin-bottom: 20px;
+      text-align: center;
+      margin-bottom: 28px;
     }
 
-    .badge {
+    .hero-badge {
       display: inline-block;
-      padding: 8px 14px;
+      padding: 8px 16px;
       border-radius: 999px;
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(255,255,255,0.9);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
       font-size: 13px;
-      margin-bottom: 12px;
+      letter-spacing: 0.04em;
+      color: #6b7280;
+      margin-bottom: 14px;
     }
 
     h1 {
       margin: 0;
-      font-size: 34px;
-      line-height: 1.2;
+      font-size: clamp(30px, 5vw, 52px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: #111827;
     }
 
-    .sub {
-      margin-top: 10px;
-      color: #6b7280;
-      line-height: 1.6;
+    .hero-sub {
+      margin: 14px auto 0;
+      max-width: 720px;
+      line-height: 1.8;
       font-size: 15px;
+      color: #6b7280;
     }
 
-    .toolbar {
+    .topbar {
       display: flex;
+      justify-content: space-between;
+      align-items: center;
       flex-wrap: wrap;
       gap: 10px;
-      margin: 20px 0;
+      margin-bottom: 18px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     button {
       border: none;
-      border-radius: 14px;
-      padding: 11px 16px;
       cursor: pointer;
-      font-size: 14px;
       transition: 0.2s ease;
+      font-family: inherit;
     }
 
-    button:hover {
-      opacity: 0.92;
+    .tab-btn, .ghost-btn, .soft-btn {
+      border-radius: 999px;
+      padding: 11px 16px;
+      font-size: 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
     }
 
-    .btn-primary {
+    .tab-btn {
+      background: rgba(255,255,255,0.72);
+      color: #374151;
+      border: 1px solid rgba(255,255,255,0.85);
+      backdrop-filter: blur(10px);
+    }
+
+    .tab-btn.active {
       background: #111827;
       color: #ffffff;
+      border-color: #111827;
     }
 
-    .btn-outline {
-      background: #ffffff;
+    .ghost-btn {
+      background: rgba(255,255,255,0.72);
       color: #111827;
-      border: 1px solid #d1d5db;
+      border: 1px solid rgba(255,255,255,0.9);
+      backdrop-filter: blur(10px);
     }
 
-    .btn-danger {
-      background: #fee2e2;
-      color: #991b1b;
-      border: 1px solid #fecaca;
+    .ghost-btn:hover, .tab-btn:hover, .soft-btn:hover {
+      transform: translateY(-1px);
+      opacity: 0.97;
     }
 
     .stats {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
     }
 
-    .stat {
-      background: #ffffff;
-      border-radius: 20px;
-      padding: 18px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    .stat-card, .panel {
+      background: rgba(255,255,255,0.68);
+      border: 1px solid rgba(255,255,255,0.86);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 18px 40px rgba(31, 41, 55, 0.08);
+      border-radius: 28px;
+    }
+
+    .stat-card {
+      padding: 18px 20px;
     }
 
     .stat-label {
@@ -105,251 +141,225 @@
     }
 
     .stat-value {
-      font-size: 28px;
+      font-size: 30px;
       font-weight: 700;
+      color: #111827;
+      letter-spacing: -0.03em;
     }
 
-    .grid {
+    .layout {
       display: grid;
       grid-template-columns: 1.1fr 0.9fr;
-      gap: 20px;
+      gap: 18px;
+      align-items: start;
     }
 
-    .card {
-      background: #ffffff;
-      border-radius: 28px;
+    .panel {
       padding: 22px;
-      box-shadow: 0 12px 34px rgba(0,0,0,0.06);
     }
 
-    .card-title {
+    .panel-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
       font-size: 20px;
       font-weight: 700;
-      margin-bottom: 16px;
+      color: #111827;
     }
 
-    .filter-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .pill {
-      padding: 8px 14px;
-      border-radius: 999px;
-      border: 1px solid #d1d5db;
-      background: #fff;
-      cursor: pointer;
+    .status {
       font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 12px;
     }
 
-    .pill.active {
-      background: #111827;
-      color: #fff;
-      border-color: #111827;
-    }
-
-    .quote-box {
-      min-height: 360px;
-      border-radius: 28px;
-      background: radial-gradient(circle at top, #ffffff, rgba(241,245,249,0.95), rgba(226,232,240,0.92));
+    .quote-stage {
+      min-height: 460px;
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.98), rgba(248,250,252,0.92), rgba(226,232,240,0.94));
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 28px;
-      text-align: center;
+      position: relative;
+      overflow: hidden;
     }
 
-    .quote-category {
-      display: inline-block;
-      margin-bottom: 16px;
-      font-size: 13px;
-      color: #374151;
-      background: rgba(255,255,255,0.9);
-      border: 1px solid #e5e7eb;
-      padding: 7px 12px;
+    .quote-stage::before {
+      content: "";
+      position: absolute;
+      inset: auto -60px -90px auto;
+      width: 220px;
+      height: 220px;
       border-radius: 999px;
+      background: rgba(255,255,255,0.45);
+      filter: blur(8px);
+    }
+
+    .quote-card {
+      width: 100%;
+      max-width: 640px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      animation: fadeUp 0.35s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .quote-ko {
-      font-size: 28px;
-      line-height: 1.8;
       margin: 0;
+      font-family: "Gowun Batang", serif;
+      font-size: clamp(24px, 4vw, 36px);
+      line-height: 1.95;
+      color: #111827;
       white-space: pre-wrap;
+      letter-spacing: -0.02em;
     }
 
     .quote-en-wrap {
-      margin: 22px auto 0;
+      margin: 24px auto 0;
       max-width: 560px;
-      padding: 18px;
-      background: rgba(255,255,255,0.82);
-      border-radius: 22px;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.04);
+      padding: 18px 20px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.76);
+      border: 1px solid rgba(255,255,255,0.88);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.06);
+      backdrop-filter: blur(10px);
     }
 
     .quote-en-label {
       font-size: 12px;
-      color: #6b7280;
+      color: #9ca3af;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
       margin-bottom: 8px;
-      font-weight: 600;
     }
 
     .quote-en {
       margin: 0;
-      font-size: 17px;
-      line-height: 1.75;
+      font-size: 16px;
+      line-height: 1.85;
       color: #4b5563;
       white-space: pre-wrap;
     }
 
     .quote-actions {
-      margin-top: 24px;
       display: flex;
       justify-content: center;
-      flex-wrap: wrap;
       gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .soft-btn {
+      background: #111827;
+      color: white;
     }
 
     .empty {
-      color: #6b7280;
       text-align: center;
-      line-height: 1.7;
+      color: #6b7280;
+      line-height: 1.8;
+      font-size: 15px;
     }
 
     .search {
       width: 100%;
-      padding: 12px 14px;
-      border-radius: 16px;
-      border: 1px solid #d1d5db;
-      outline: none;
+      border: 1px solid rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.76);
+      border-radius: 18px;
+      padding: 13px 15px;
       font-size: 14px;
+      outline: none;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.4);
       margin-bottom: 14px;
     }
 
     .list {
-      max-height: 560px;
+      max-height: 620px;
       overflow: auto;
       padding-right: 4px;
     }
 
-    .list-item {
-      border: 1px solid #eceff3;
+    .quote-item {
+      padding: 18px;
       border-radius: 22px;
-      padding: 16px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(255,255,255,0.9);
       margin-bottom: 12px;
-      background: #fff;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.04);
     }
 
-    .list-top {
+    .quote-item-ko {
+      margin: 0;
+      font-family: "Gowun Batang", serif;
+      font-size: 18px;
+      line-height: 1.9;
+      color: #1f2937;
+      white-space: pre-wrap;
+    }
+
+    .quote-item-en {
+      margin: 10px 0 0;
+      font-size: 14px;
+      line-height: 1.8;
+      color: #6b7280;
+      white-space: pre-wrap;
+    }
+
+    .quote-item-actions {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-
-    .list-cat {
-      display: inline-block;
-      font-size: 12px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: #f3f4f6;
-      color: #374151;
-    }
-
-    .mini-actions {
-      display: flex;
-      gap: 6px;
+      gap: 8px;
+      margin-top: 14px;
       flex-wrap: wrap;
     }
 
     .mini-btn {
-      padding: 7px 10px;
-      font-size: 12px;
-      border-radius: 10px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      background: white;
+      color: #111827;
+      border: 1px solid #e5e7eb;
     }
 
-    .list-ko {
-      margin: 0;
-      font-size: 14px;
+    .notice {
+      margin-top: 12px;
+      font-size: 12px;
       line-height: 1.7;
-      white-space: pre-wrap;
-    }
-
-    .list-en {
-      margin: 10px 0 0;
       color: #6b7280;
-      font-size: 13px;
-      line-height: 1.6;
-      white-space: pre-wrap;
     }
 
-    .form-card {
-      margin-top: 20px;
+    @media (max-width: 920px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
     }
 
-    .label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      margin: 12px 0 8px;
-    }
+    @media (max-width: 640px) {
+      .container {
+        padding: 22px 14px 42px;
+      }
 
-    textarea, select {
-      width: 100%;
-      border: 1px solid #d1d5db;
-      border-radius: 16px;
-      padding: 12px 14px;
-      font-size: 14px;
-      outline: none;
-      background: #fff;
-    }
-
-    textarea {
-      min-height: 110px;
-      resize: vertical;
-      font-family: inherit;
-    }
-
-    .row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .muted {
-      font-size: 12px;
-      color: #6b7280;
-      margin-top: 8px;
-      line-height: 1.6;
-    }
-
-    .loading {
-      font-size: 14px;
-      color: #6b7280;
-      margin-bottom: 12px;
-    }
-
-    @media (max-width: 820px) {
       .stats {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .grid {
         grid-template-columns: 1fr;
       }
 
-      .quote-ko {
-        font-size: 22px;
+      .panel, .stat-card {
+        border-radius: 24px;
       }
 
-      h1 {
-        font-size: 28px;
-      }
-
-      .row {
-        grid-template-columns: 1fr;
+      .quote-stage {
+        min-height: 380px;
+        padding: 22px 18px;
       }
     }
   </style>
@@ -357,157 +367,76 @@
 <body>
   <div class="container">
     <div class="hero">
-      <div class="badge">Yun’s Quote Room</div>
+      <div class="hero-badge">Yun’s Quote Room</div>
       <h1>나만의 글귀 보관함</h1>
-      <div class="sub">
-        좋아하는 문장을 저장하고, 카테고리별로 모아두고, 랜덤으로 다시 꺼내보는 누님 전용 웹앱.
-        이제 Firebase에 저장해서 어디서든 같은 글귀를 볼 수 있게 만든 버전이야.
-      </div>
+      <p class="hero-sub">
+        구글시트에 정리한 글귀를 불러와 랜덤으로 꺼내보는 누님 전용 웹앱.
+        한국어 원문과 영어 문장을 함께, 조금 더 예쁘고 차분하게 볼 수 있게 구성했어.
+      </p>
     </div>
 
-    <div class="toolbar">
-      <button id="tabRandom" class="btn-primary">랜덤 글귀</button>
-      <button id="tabAll" class="btn-outline">모든 글귀 보기</button>
-      <button id="refreshBtn" class="btn-outline">새로 불러오기</button>
+    <div class="topbar">
+      <div class="tabs">
+        <button id="tabRandom" class="tab-btn active">랜덤 글귀</button>
+        <button id="tabAll" class="tab-btn">모든 글귀 보기</button>
+      </div>
+      <button id="refreshBtn" class="ghost-btn">최신 글귀 다시 불러오기</button>
     </div>
 
     <div class="stats">
-      <div class="stat">
-        <div class="stat-label">전체</div>
+      <div class="stat-card">
+        <div class="stat-label">전체 글귀</div>
         <div id="statTotal" class="stat-value">0</div>
       </div>
-      <div class="stat">
-        <div class="stat-label">R=VD</div>
-        <div id="statRvd" class="stat-value">0</div>
+      <div class="stat-card">
+        <div class="stat-label">영어 번역 포함</div>
+        <div id="statEnglish" class="stat-value">0</div>
       </div>
-      <div class="stat">
-        <div class="stat-label">감성</div>
-        <div id="statEmo" class="stat-value">0</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">즐겨찾기</div>
-        <div id="statFav" class="stat-value">0</div>
+      <div class="stat-card">
+        <div class="stat-label">현재 상태</div>
+        <div id="statStatus" class="stat-value" style="font-size:20px; line-height:1.4;">불러오는 중</div>
       </div>
     </div>
 
-    <div class="grid">
-      <div>
-        <div id="randomCard" class="card">
-          <div class="card-title">오늘의 랜덤 글귀</div>
-
-          <div class="filter-row">
-            <button class="pill active" data-filter="전체">전체</button>
-            <button class="pill" data-filter="R=VD">R=VD</button>
-            <button class="pill" data-filter="감성">감성</button>
-          </div>
-
-          <div class="quote-box">
-            <div id="quoteArea" class="empty">불러오는 중...</div>
-          </div>
+    <div class="layout">
+      <div class="panel" id="randomPanel">
+        <div class="panel-title">
+          <span>오늘의 랜덤 글귀</span>
         </div>
-
-        <div id="allCard" class="card" style="display:none;">
-          <div class="card-title">모든 글귀 보기</div>
-          <input id="searchInput" class="search" type="text" placeholder="글귀 검색" />
-
-          <div class="filter-row">
-            <button class="pill active" data-all-filter="전체">전체</button>
-            <button class="pill" data-all-filter="R=VD">R=VD</button>
-            <button class="pill" data-all-filter="감성">감성</button>
-          </div>
-
-          <div id="allList" class="list"></div>
+        <div id="statusText" class="status">구글시트에서 데이터를 불러오는 중...</div>
+        <div class="quote-stage">
+          <div id="quoteStageContent" class="empty">잠시만 기다려줘.</div>
         </div>
       </div>
 
-      <div>
-        <div class="card">
-          <div class="card-title">새 글귀 저장</div>
-          <div id="loadingText" class="loading">Firebase 연결 중...</div>
-
-          <label class="label" for="koreanInput">한국어 글귀</label>
-          <textarea id="koreanInput" placeholder="좋아하는 한국어 글귀를 입력해 주세요"></textarea>
-
-          <label class="label" for="englishInput">영어 번역</label>
-          <textarea id="englishInput" placeholder="영어 번역을 함께 넣고 싶다면 입력해 주세요"></textarea>
-
-          <div class="row">
-            <div>
-              <label class="label" for="categoryInput">카테고리</label>
-              <select id="categoryInput">
-                <option value="감성">감성</option>
-                <option value="R=VD">R=VD</option>
-              </select>
-            </div>
-            <div>
-              <label class="label" for="favoriteInput">즐겨찾기</label>
-              <select id="favoriteInput">
-                <option value="false">아니오</option>
-                <option value="true">예</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="toolbar" style="margin-bottom:0;">
-            <button id="saveBtn" class="btn-primary">저장하기</button>
-          </div>
-
-          <div class="muted">
-            저장하면 Firebase에 올라가서 같은 주소로 접속한 다른 기기에서도 같이 볼 수 있어.
-          </div>
+      <div class="panel" id="allPanel" style="display:none;">
+        <div class="panel-title">
+          <span>전체 글귀 보기</span>
+        </div>
+        <input id="searchInput" class="search" type="text" placeholder="한국어 또는 영어로 검색" />
+        <div id="allList" class="list"></div>
+        <div class="notice">
+          시트에서 내용을 수정한 뒤 여기 반영이 안 보이면, 상단의 <b>최신 글귀 다시 불러오기</b>를 눌러줘.
         </div>
       </div>
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import {
-      getFirestore,
-      collection,
-      addDoc,
-      getDocs,
-      updateDoc,
-      deleteDoc,
-      doc,
-      serverTimestamp,
-      query,
-      orderBy
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyCLGqfm649Cl1AJfNcrjZd6zcpiTxOugbs",
-      authDomain: "quote-app-77498.firebaseapp.com",
-      projectId: "quote-app-77498",
-      storageBucket: "quote-app-77498.firebasestorage.app",
-      messagingSenderId: "856472751553",
-      appId: "1:856472751553:web:5df8880a34739603d4b340"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const quotesRef = collection(db, "quotes");
+  <script>
+    const SHEET_ID = "1F1Sms0sUjvYzuK7FZRB2WmJ2qXncZcX4";
+    const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Sheet1`;
 
     let quotes = [];
     let currentQuote = null;
-    let currentFilter = "전체";
-    let allFilter = "전체";
     let currentView = "random";
 
-    const quoteArea = document.getElementById("quoteArea");
+    const quoteStageContent = document.getElementById("quoteStageContent");
     const allList = document.getElementById("allList");
     const searchInput = document.getElementById("searchInput");
-    const loadingText = document.getElementById("loadingText");
-
-    const tabRandom = document.getElementById("tabRandom");
-    const tabAll = document.getElementById("tabAll");
-    const randomCard = document.getElementById("randomCard");
-    const allCard = document.getElementById("allCard");
-
+    const statusText = document.getElementById("statusText");
     const statTotal = document.getElementById("statTotal");
-    const statRvd = document.getElementById("statRvd");
-    const statEmo = document.getElementById("statEmo");
-    const statFav = document.getElementById("statFav");
+    const statEnglish = document.getElementById("statEnglish");
+    const statStatus = document.getElementById("statStatus");
 
     function escapeHtml(str = "") {
       return str
@@ -520,275 +449,184 @@
 
     function setView(view) {
       currentView = view;
-
-      if (view === "random") {
-        randomCard.style.display = "block";
-        allCard.style.display = "none";
-        tabRandom.className = "btn-primary";
-        tabAll.className = "btn-outline";
-      } else {
-        randomCard.style.display = "none";
-        allCard.style.display = "block";
-        tabRandom.className = "btn-outline";
-        tabAll.className = "btn-primary";
-      }
+      document.getElementById("randomPanel").style.display = view === "random" ? "block" : "none";
+      document.getElementById("allPanel").style.display = view === "all" ? "block" : "none";
+      document.getElementById("tabRandom").classList.toggle("active", view === "random");
+      document.getElementById("tabAll").classList.toggle("active", view === "all");
     }
 
     function updateStats() {
       statTotal.textContent = quotes.length;
-      statRvd.textContent = quotes.filter(q => q.category === "R=VD").length;
-      statEmo.textContent = quotes.filter(q => q.category === "감성").length;
-      statFav.textContent = quotes.filter(q => q.favorite).length;
+      statEnglish.textContent = quotes.filter(q => q.english).length;
+      statStatus.textContent = quotes.length ? "연결 완료" : "데이터 없음";
     }
 
-    function getFilteredQuotesForRandom() {
-      return quotes.filter(q => currentFilter === "전체" || q.category === currentFilter);
+    function parseCSVLine(line) {
+      const result = [];
+      let current = "";
+      let insideQuotes = false;
+
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        const next = line[i + 1];
+
+        if (char === '"') {
+          if (insideQuotes && next === '"') {
+            current += '"';
+            i++;
+          } else {
+            insideQuotes = !insideQuotes;
+          }
+        } else if (char === "," && !insideQuotes) {
+          result.push(current);
+          current = "";
+        } else {
+          current += char;
+        }
+      }
+
+      result.push(current);
+      return result.map(v => v.trim());
     }
 
-    function getFilteredQuotesForAll() {
-      const keyword = searchInput.value.trim().toLowerCase();
+    function parseCSV(text) {
+      const lines = text.replace(/^﻿/, "").split(/
+?
+/).filter(Boolean);
+      if (!lines.length) return [];
 
-      return quotes.filter(q => {
-        const categoryOk = allFilter === "전체" || q.category === allFilter;
-        const searchOk =
-          !keyword ||
-          q.text.toLowerCase().includes(keyword) ||
-          (q.english || "").toLowerCase().includes(keyword);
+      const headers = parseCSVLine(lines[0]).map(h => h.toLowerCase());
+      const koreanIndex = headers.findIndex(h => h === "korean");
+      const englishIndex = headers.findIndex(h => h === "english");
 
-        return categoryOk && searchOk;
-      });
+      if (koreanIndex === -1) {
+        throw new Error("시트 첫 행에 'korean' 열이 필요해.");
+      }
+
+      return lines.slice(1)
+        .map(parseCSVLine)
+        .map(cols => ({
+          korean: cols[koreanIndex] || "",
+          english: englishIndex > -1 ? (cols[englishIndex] || "") : ""
+        }))
+        .filter(item => item.korean);
     }
 
     function renderRandomQuote() {
-      const filtered = getFilteredQuotesForRandom();
-
-      if (!filtered.length) {
-        quoteArea.innerHTML = `<div class="empty">해당 카테고리에 글귀가 없어요.</div>`;
+      if (!quotes.length) {
+        quoteStageContent.innerHTML = `<div class="empty">불러온 글귀가 없어요.<br>시트의 첫 행을 korean / english 로 맞춰줘.</div>`;
         return;
       }
 
-      if (!currentQuote || !filtered.some(q => q.id === currentQuote.id)) {
-        currentQuote = filtered[Math.floor(Math.random() * filtered.length)];
+      if (!currentQuote) {
+        currentQuote = quotes[Math.floor(Math.random() * quotes.length)];
       }
 
-      quoteArea.innerHTML = `
-        <div style="width:100%;">
-          <div class="quote-category">${escapeHtml(currentQuote.category)}</div>
-          <p class="quote-ko">“${escapeHtml(currentQuote.text)}”</p>
-          ${
-            currentQuote.english
-              ? `
-              <div class="quote-en-wrap">
-                <div class="quote-en-label">English Version</div>
-                <p class="quote-en">${escapeHtml(currentQuote.english)}</p>
-              </div>
-            `
-              : ""
-          }
+      quoteStageContent.innerHTML = `
+        <div class="quote-card">
+          <p class="quote-ko">“${escapeHtml(currentQuote.korean)}”</p>
+          ${currentQuote.english ? `
+            <div class="quote-en-wrap">
+              <div class="quote-en-label">English Version</div>
+              <p class="quote-en">${escapeHtml(currentQuote.english)}</p>
+            </div>
+          ` : ""}
           <div class="quote-actions">
-            <button id="randomPickBtn" class="btn-outline">다른 글귀 보기</button>
-            <button id="toggleFavBtn" class="${currentQuote.favorite ? "btn-primary" : "btn-outline"}">
-              ${currentQuote.favorite ? "즐겨찾기 해제" : "즐겨찾기"}
-            </button>
+            <button id="randomAgainBtn" class="soft-btn">다른 글귀 보기</button>
+            <button id="goAllBtn" class="ghost-btn">전체 글귀 보기</button>
           </div>
         </div>
       `;
 
-      document.getElementById("randomPickBtn").addEventListener("click", pickRandomQuote);
-      document.getElementById("toggleFavBtn").addEventListener("click", async () => {
-        await toggleFavorite(currentQuote.id, !currentQuote.favorite);
-      });
+      document.getElementById("randomAgainBtn").addEventListener("click", pickRandomQuote);
+      document.getElementById("goAllBtn").addEventListener("click", () => setView("all"));
     }
 
     function renderAllQuotes() {
-      const filtered = getFilteredQuotesForAll();
+      const keyword = searchInput.value.trim().toLowerCase();
+      const filtered = quotes.filter(q => {
+        if (!keyword) return true;
+        return q.korean.toLowerCase().includes(keyword) || (q.english || "").toLowerCase().includes(keyword);
+      });
 
       if (!filtered.length) {
-        allList.innerHTML = `<div class="empty" style="padding:30px 0;">조건에 맞는 글귀가 없어요.</div>`;
+        allList.innerHTML = `<div class="empty" style="padding: 30px 0;">검색 결과가 없어요.</div>`;
         return;
       }
 
-      allList.innerHTML = filtered.map(q => `
-        <div class="list-item">
-          <div class="list-top">
-            <span class="list-cat">${escapeHtml(q.category)}</span>
-            <div class="mini-actions">
-              <button class="mini-btn btn-outline" data-open="${q.id}">보기</button>
-              <button class="mini-btn ${q.favorite ? "btn-primary" : "btn-outline"}" data-fav="${q.id}">
-                ${q.favorite ? "★" : "☆"}
-              </button>
-              <button class="mini-btn btn-danger" data-del="${q.id}">삭제</button>
-            </div>
+      allList.innerHTML = filtered.map((q, index) => `
+        <div class="quote-item">
+          <p class="quote-item-ko">${escapeHtml(q.korean)}</p>
+          ${q.english ? `<p class="quote-item-en">${escapeHtml(q.english)}</p>` : ""}
+          <div class="quote-item-actions">
+            <button class="mini-btn" data-open-index="${index}">랜덤 카드로 보기</button>
           </div>
-          <p class="list-ko">${escapeHtml(q.text)}</p>
-          ${q.english ? `<p class="list-en">${escapeHtml(q.english)}</p>` : ""}
         </div>
       `).join("");
 
-      document.querySelectorAll("[data-open]").forEach(btn => {
+      document.querySelectorAll("[data-open-index]").forEach(btn => {
         btn.addEventListener("click", () => {
-          const q = quotes.find(item => item.id === btn.dataset.open);
-          if (!q) return;
-          currentQuote = q;
+          currentQuote = filtered[Number(btn.dataset.openIndex)];
           setView("random");
           renderRandomQuote();
           window.scrollTo({ top: 0, behavior: "smooth" });
         });
       });
-
-      document.querySelectorAll("[data-fav]").forEach(btn => {
-        btn.addEventListener("click", async () => {
-          const q = quotes.find(item => item.id === btn.dataset.fav);
-          if (!q) return;
-          await toggleFavorite(q.id, !q.favorite);
-        });
-      });
-
-      document.querySelectorAll("[data-del]").forEach(btn => {
-        btn.addEventListener("click", async () => {
-          const ok = confirm("이 글귀를 삭제할까?");
-          if (!ok) return;
-          await removeQuote(btn.dataset.del);
-        });
-      });
     }
 
     function pickRandomQuote() {
-      const filtered = getFilteredQuotesForRandom();
-      if (!filtered.length) return;
-
-      let next = filtered[Math.floor(Math.random() * filtered.length)];
-
-      if (filtered.length > 1 && currentQuote && next.id === currentQuote.id) {
-        next = filtered.find(q => q.id !== currentQuote.id) || next;
+      if (!quotes.length) return;
+      let next = quotes[Math.floor(Math.random() * quotes.length)];
+      if (quotes.length > 1 && currentQuote && next.korean === currentQuote.korean && next.english === currentQuote.english) {
+        next = quotes.find(q => q !== currentQuote) || next;
       }
-
       currentQuote = next;
       renderRandomQuote();
     }
 
-    async function fetchQuotes() {
-      loadingText.textContent = "Firebase에서 글귀 불러오는 중...";
+    async function loadQuotes() {
+      statusText.textContent = "구글시트에서 최신 글귀를 불러오는 중...";
+      statStatus.textContent = "불러오는 중";
+
       try {
-        const q = query(quotesRef, orderBy("createdAt", "desc"));
-        const snapshot = await getDocs(q);
+        const response = await fetch(CSV_URL);
+        if (!response.ok) {
+          throw new Error("시트에 접근하지 못했어.");
+        }
 
-        quotes = snapshot.docs.map(d => ({
-          id: d.id,
-          text: d.data().text || "",
-          english: d.data().english || "",
-          category: d.data().category || "감성",
-          favorite: !!d.data().favorite,
-          createdAt: d.data().createdAt || null
-        }));
-
+        const csv = await response.text();
+        quotes = parseCSV(csv);
+        currentQuote = quotes[0] || null;
         updateStats();
-        renderAllQuotes();
-
-        const filtered = getFilteredQuotesForRandom();
-        currentQuote = filtered[0] || null;
         renderRandomQuote();
-
-        loadingText.textContent = "Firebase 연결 완료";
+        renderAllQuotes();
+        statusText.textContent = "구글시트와 연결됐어. 시트 수정 후 새로 불러오면 최신 글귀가 반영돼.";
       } catch (error) {
         console.error(error);
-        loadingText.textContent = "불러오기 실패. Firestore 설정을 확인해 주세요.";
-        quoteArea.innerHTML = `
+        statStatus.textContent = "연결 실패";
+        statusText.textContent = "시트를 읽지 못했어. 시트 이름이나 공개 설정을 확인해줘.";
+        quoteStageContent.innerHTML = `
           <div class="empty">
-            데이터를 불러오지 못했어.<br>
-            Firestore Database를 만들었는지, 규칙이 너무 막혀있지 않은지 확인해줘.
+            데이터를 불러오지 못했어.<br><br>
+            1) 시트 이름이 <b>Sheet1</b>인지<br>
+            2) 첫 행이 <b>korean / english</b>인지<br>
+            3) 시트를 <b>웹에 게시</b>했는지 확인해줘.
           </div>
         `;
+        allList.innerHTML = "";
       }
     }
 
-    async function addQuote() {
-      const text = document.getElementById("koreanInput").value.trim();
-      const english = document.getElementById("englishInput").value.trim();
-      const category = document.getElementById("categoryInput").value;
-      const favorite = document.getElementById("favoriteInput").value === "true";
-
-      if (!text) {
-        alert("한국어 글귀를 입력해줘.");
-        return;
-      }
-
-      try {
-        await addDoc(quotesRef, {
-          text,
-          english,
-          category,
-          favorite,
-          createdAt: serverTimestamp()
-        });
-
-        document.getElementById("koreanInput").value = "";
-        document.getElementById("englishInput").value = "";
-        document.getElementById("categoryInput").value = "감성";
-        document.getElementById("favoriteInput").value = "false";
-
-        await fetchQuotes();
-        alert("저장 완료!");
-      } catch (error) {
-        console.error(error);
-        alert("저장 실패. Firestore 권한이나 설정을 확인해줘.");
-      }
-    }
-
-    async function toggleFavorite(id, value) {
-      try {
-        const ref = doc(db, "quotes", id);
-        await updateDoc(ref, { favorite: value });
-        await fetchQuotes();
-      } catch (error) {
-        console.error(error);
-        alert("즐겨찾기 변경 실패");
-      }
-    }
-
-    async function removeQuote(id) {
-      try {
-        const ref = doc(db, "quotes", id);
-        await deleteDoc(ref);
-        await fetchQuotes();
-      } catch (error) {
-        console.error(error);
-        alert("삭제 실패");
-      }
-    }
-
-    document.getElementById("saveBtn").addEventListener("click", addQuote);
-    document.getElementById("refreshBtn").addEventListener("click", fetchQuotes);
-
-    tabRandom.addEventListener("click", () => setView("random"));
-    tabAll.addEventListener("click", () => {
+    document.getElementById("tabRandom").addEventListener("click", () => setView("random"));
+    document.getElementById("tabAll").addEventListener("click", () => {
       setView("all");
       renderAllQuotes();
     });
-
+    document.getElementById("refreshBtn").addEventListener("click", loadQuotes);
     searchInput.addEventListener("input", renderAllQuotes);
 
-    document.querySelectorAll("[data-filter]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        currentFilter = btn.dataset.filter;
-        document.querySelectorAll("[data-filter]").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        currentQuote = null;
-        renderRandomQuote();
-      });
-    });
-
-    document.querySelectorAll("[data-all-filter]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        allFilter = btn.dataset.allFilter;
-        document.querySelectorAll("[data-all-filter]").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        renderAllQuotes();
-      });
-    });
-
     setView("random");
-    fetchQuotes();
+    loadQuotes();
   </script>
 </body>
 </html>
